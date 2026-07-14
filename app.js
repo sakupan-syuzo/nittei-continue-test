@@ -1,6 +1,6 @@
 const JSONBIN_API_KEY = '$2a$10$fuyJjSPztFHlaKC4O/yQJ.wi1F1JwubQoqjmtOOPg1HiUHTClV9dS';
 const JSONBIN_API_URL = 'https://api.jsonbin.io/v3/b';
-const JSONBIN_BIN_ID = '6a558429da38895dfe598eab'; // ここに指定された BIN ID を設定
+const JSONBIN_BIN_ID = '6a558429da38895dfe598eab'; // ここに指定された BIN_ID を設定
 const STORAGE_KEY = 'events';
 
 let events = [];
@@ -14,16 +14,14 @@ async function loadEvents() {
                 'X-Master-Key': JSONBIN_API_KEY
             }
         });
-        if (response.ok) {
-            const data = await response.json();
-            events = data.record.events || [];
-        } else {
-            // エラー時はローカルストレージから読み込み
-            const localData = localStorage.getItem(STORAGE_KEY);
-            events = localData ? JSON.parse(localData) : [];
+        if (!response.ok) {
+            throw new Error(`Failed to load events: ${response.statusText}`);
         }
+        const data = await response.json();
+        events = data.record.events || [];
     } catch (error) {
         console.error('Error loading events:', error);
+        alert('イベントの読み込みに失敗しました。再度お試しください。');
         // エラー時はローカルストレージから読み込み
         const localData = localStorage.getItem(STORAGE_KEY);
         events = localData ? JSON.parse(localData) : [];
@@ -61,13 +59,13 @@ async function saveEvents() {
             body: JSON.stringify({ events })
         });
         if (!response.ok) {
-            throw new Error('Failed to save events');
+            throw new Error(`Failed to save events: ${response.statusText}`);
         }
     } catch (error) {
         console.error('Error saving events:', error);
+        alert('イベントの保存に失敗しました。再度お試しください。');
         // エラー時はローカルストレージに保存
         localStorage.setItem(STORAGE_KEY, JSON.stringify(events));
-        alert('イベントの保存に失敗しました。再度お試しください。');
     } finally {
         showLoading(false);
     }

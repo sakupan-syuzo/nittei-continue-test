@@ -8,7 +8,7 @@ let events = [];
 async function loadEvents() {
     showLoading(true);
     try {
-        const response = await fetch(`${JSONBIN_API_URL}/${JSONBIN_BIN_ID}/latest`, {
+        const response = await fetch(`${JSONBIN_API_URL}/${JSONBIN_BIN_ID}`, {
             method: 'GET',
             headers: {
                 'X-Master-Key': JSONBIN_API_KEY
@@ -72,6 +72,30 @@ async function saveEvents() {
     }
 }
 
+async function createEvent() {
+    const title = document.getElementById('event-title-input').value.trim();
+    const description = document.getElementById('event-description-input').value.trim();
+    const date = new Date(document.getElementById('event-date-input').value).toISOString();
+
+    if (!title || !description || !date) {
+        alert('タイトル、説明、日時を入力してください');
+        return;
+    }
+
+    const eventId = Date.now().toString(); // シンプルなID生成
+    events.push({
+        id: eventId,
+        title,
+        description,
+        dateCandidates: [date],
+        participants: []
+    });
+
+    await saveEvents();
+    closeModal();
+    loadEvents();
+}
+
 function showEventDetail(eventId) {
     const event = events.find(e => e.id === eventId);
     if (!event) {
@@ -93,7 +117,7 @@ function showParticipantRegistrationForm() {
     participantForm.style.display = 'block';
 }
 
-function addParticipant() {
+async function addParticipant() {
     const name = document.getElementById('participant-name').value.trim();
     const email = document.getElementById('participant-email').value.trim();
 
@@ -106,7 +130,7 @@ function addParticipant() {
     const event = events.find(e => e.id === eventId);
     if (event) {
         event.participants.push({ name, email });
-        saveEvents();
+        await saveEvents();
         closeModal();
         showEventDetail(eventId);
     } else {
@@ -117,6 +141,7 @@ function addParticipant() {
 function closeModal() {
     document.getElementById('modal').style.display = 'none';
     document.getElementById('participant-form').style.display = 'none';
+    document.getElementById('create-event-form').style.display = 'none';
 }
 
 function showLoading(isLoading) {
@@ -133,4 +158,9 @@ function showLoading(isLoading) {
             document.body.removeChild(loadingOverlay);
         }
     }
+}
+
+function showCreateEventForm() {
+    const createEventForm = document.getElementById('create-event-form');
+    createEventForm.style.display = 'block';
 }

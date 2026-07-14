@@ -1,6 +1,6 @@
 const JSONBIN_API_KEY = '$2a$10$fuyJjSPztFHlaKC4O/yQJ.wi1F1JwubQoqjmtOOPg1HiUHTClV9dS';
 const JSONBIN_API_URL = 'https://api.jsonbin.io/v3/b';
-const JSONBIN_BIN_ID = '6a558429da38895dfe598eab'; // 新しい BIN ID を入力してください
+const JSONBIN_BIN_ID = '6a558429da38895dfe598eab'; // ここに指定された BIN ID を設定
 const STORAGE_KEY = 'events';
 
 let events = [];
@@ -170,7 +170,7 @@ function showLoading(isLoading) {
         }
     } else {
         if (loadingOverlay) {
-            document.body.removeChild(loadingOverlay);
+            document.body.removeChild(overlay);
         }
     }
 }

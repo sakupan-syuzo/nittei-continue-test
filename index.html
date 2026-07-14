@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>イベントスケジューラー</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>イベントスケジューラー</h1>
+        <button onclick="loadEvents()">イベントを読み込む</button>
+        <div id="event-list"></div>
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h2>イベント詳細</h2>
+                <p><strong>ID:</strong> <span id="event-id"></span></p>
+                <p><strong>タイトル:</strong> <span id="event-title"></span></p>
+                <p><strong>説明:</strong> <span id="event-description"></span></p>
+                <p><strong>日時候補:</strong> <span id="event-dates"></span></p>
+                <button onclick="showParticipantRegistrationForm()">参加者登録</button>
+                <div id="participant-form" class="modal">
+                    <h3>参加者登録</h3>
+                    <input type="text" id="participant-name" placeholder="名前" required>
+                    <input type="email" id="participant-email" placeholder="メールアドレス" required>
+                    <button onclick="addParticipant()">追加</button>
+                    <button onclick="closeModal()">キャンセル</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>

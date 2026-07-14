@@ -22,7 +22,6 @@ async function loadEvents() {
             const localData = localStorage.getItem(STORAGE_KEY);
             events = localData ? JSON.parse(localData) : [];
         }
-        renderEventList();
     } catch (error) {
         console.error('Error loading events:', error);
         // エラー時はローカルストレージから読み込み
@@ -30,6 +29,7 @@ async function loadEvents() {
         events = localData ? JSON.parse(localData) : [];
     } finally {
         showLoading(false);
+        renderEventList();
     }
 }
 
@@ -120,11 +120,17 @@ function closeModal() {
 }
 
 function showLoading(isLoading) {
-    const loadingDiv = document.createElement('div');
-    loadingDiv.className = 'loading-overlay';
+    const loadingOverlay = document.querySelector('.loading-overlay');
     if (isLoading) {
-        document.body.appendChild(loadingDiv);
+        if (!loadingOverlay) {
+            const overlay = document.createElement('div');
+            overlay.className = 'loading-overlay';
+            overlay.innerHTML = '<p>Loading...</p>';
+            document.body.appendChild(overlay);
+        }
     } else {
-        document.body.removeChild(loadingDiv);
+        if (loadingOverlay) {
+            document.body.removeChild(loadingOverlay);
+        }
     }
 }

@@ -67,6 +67,7 @@ async function saveEvents() {
         console.error('Error saving events:', error);
         // エラー時はローカルストレージに保存
         localStorage.setItem(STORAGE_KEY, JSON.stringify(events));
+        alert('イベントの保存に失敗しました。再度お試しください。');
     } finally {
         showLoading(false);
     }
@@ -91,9 +92,16 @@ async function createEvent() {
         participants: []
     });
 
-    await saveEvents();
-    closeModal();
-    loadEvents();
+    try {
+        await saveEvents();
+        alert('イベントが正常に保存されました。');
+    } catch (error) {
+        console.error('Error creating event:', error);
+        alert('イベントの作成に失敗しました。再度お試しください。');
+    } finally {
+        closeModal(); // フォームを閉じる
+        loadEvents();  // イベントリストを再読み込み
+    }
 }
 
 function showEventDetail(eventId) {
@@ -130,9 +138,16 @@ async function addParticipant() {
     const event = events.find(e => e.id === eventId);
     if (event) {
         event.participants.push({ name, email });
-        await saveEvents();
-        closeModal();
-        showEventDetail(eventId);
+        try {
+            await saveEvents();
+            alert('参加者が正常に追加されました。');
+        } catch (error) {
+            console.error('Error adding participant:', error);
+            alert('参加者の追加に失敗しました。再度お試しください。');
+        } finally {
+            closeModal(); // フォームを閉じる
+            showEventDetail(eventId);  // イベント詳細を再表示
+        }
     } else {
         alert('イベントが見つかりません');
     }

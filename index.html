@@ -10,7 +10,24 @@
     <div class="container">
         <h1>イベントスケジューラー</h1>
         <button onclick="loadEvents()">イベントを読み込む</button>
+        <button onclick="showCreateEventForm()">新しいイベントを作成</button>
+
+        <!-- イベント作成フォーム -->
+        <div id="create-event-form" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h2>新しいイベントを作成</h2>
+                <input type="text" id="event-title-input" placeholder="タイトル" required>
+                <textarea id="event-description-input" placeholder="説明" required></textarea>
+                <input type="datetime-local" id="event-date-input" required>
+                <button onclick="createEvent()">追加</button>
+            </div>
+        </div>
+
+        <!-- イベント一覧 -->
         <div id="event-list"></div>
+
+        <!-- イベント詳細モーダル -->
         <div id="modal" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="closeModal()">&times;</span>
@@ -20,6 +37,8 @@
                 <p><strong>説明:</strong> <span id="event-description"></span></p>
                 <p><strong>日時候補:</strong> <span id="event-dates"></span></p>
                 <button onclick="showParticipantRegistrationForm()">参加者登録</button>
+
+                <!-- 参加者登録フォーム -->
                 <div id="participant-form" class="modal">
                     <h3>参加者登録</h3>
                     <input type="text" id="participant-name" placeholder="名前" required>
